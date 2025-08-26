@@ -8,6 +8,5 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    // Navigation properties
     public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 }

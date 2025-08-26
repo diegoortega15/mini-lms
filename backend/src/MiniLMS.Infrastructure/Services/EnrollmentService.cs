@@ -38,15 +38,12 @@ public class EnrollmentService : IEnrollmentService
 
         try
         {
-            // Update job status to Processing
             job.Status = ImportJobStatus.Processing;
             await _importJobRepository.UpdateAsync(job);
 
-            // Parse CSV
             var allRows = await _csvProcessor.ParseCsvAsync(filePath);
             job.TotalRows = allRows.Count;
 
-            // Deduplicate by email
             var deduplicatedRows = _csvProcessor.DeduplicateByEmail(allRows);
             job.IgnoredDuplicates = allRows.Count - deduplicatedRows.Count;
 
@@ -57,7 +54,6 @@ public class EnrollmentService : IEnrollmentService
             {
                 try
                 {
-                    // Validate row data
                     if (string.IsNullOrWhiteSpace(row.Email) || 
                         string.IsNullOrWhiteSpace(row.Name) ||
                         !IsValidEmail(row.Email))
@@ -67,18 +63,14 @@ public class EnrollmentService : IEnrollmentService
                         continue;
                     }
 
-                    // Upsert user
                     var user = await _userRepository.UpsertByEmailAsync(row.Email, row.Name);
 
-                    // Check if enrollment already exists
                     if (await _enrollmentRepository.ExistsAsync(user.Id, courseId))
                     {
-                        // Already enrolled, count as ignored duplicate
                         job.IgnoredDuplicates++;
                         continue;
                     }
 
-                    // Create enrollment
                     var enrollment = new Enrollment
                     {
                         UserId = user.Id,
@@ -97,7 +89,6 @@ public class EnrollmentService : IEnrollmentService
                 }
             }
 
-            // Update job with final results
             job.Succeeded = succeeded;
             job.Failed = failed;
             job.Status = ImportJobStatus.Completed;

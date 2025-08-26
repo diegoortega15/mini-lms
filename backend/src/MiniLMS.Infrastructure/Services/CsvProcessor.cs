@@ -33,7 +33,7 @@ public class CsvProcessor : ICsvProcessor
             await csv.ReadAsync();
             csv.ReadHeader();
             
-            int rowNumber = 1; // Header is row 0
+            int rowNumber = 1;
             
             while (await csv.ReadAsync())
             {
@@ -81,7 +81,6 @@ public class CsvProcessor : ICsvProcessor
         {
             if (string.IsNullOrWhiteSpace(row.Email))
             {
-                // Keep invalid rows for failure counting
                 deduplicatedRows.Add(row);
                 continue;
             }
@@ -93,7 +92,6 @@ public class CsvProcessor : ICsvProcessor
                 seenEmails.Add(normalizedEmail);
                 deduplicatedRows.Add(row);
             }
-            // Skip duplicates - they will be counted as IgnoredDuplicates
         }
 
         return deduplicatedRows;

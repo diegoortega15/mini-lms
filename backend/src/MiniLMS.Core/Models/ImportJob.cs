@@ -23,6 +23,5 @@ public class ImportJob
     public string FilePath { get; set; } = string.Empty;
     public int CourseId { get; set; }
 
-    // Navigation properties
     public Course Course { get; set; } = null!;
 }

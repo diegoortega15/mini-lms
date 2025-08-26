@@ -37,13 +37,11 @@ public class EnrollmentsController : ControllerBase
     {
         try
         {
-            // Validate course exists
             if (!await _courseRepository.ExistsAsync(courseId))
             {
                 return BadRequest($"Course with ID {courseId} does not exist");
             }
 
-            // Validate file
             if (file == null || file.Length == 0)
             {
                 return BadRequest("No file provided");
@@ -54,7 +52,6 @@ public class EnrollmentsController : ControllerBase
                 return BadRequest("Only CSV files are supported");
             }
 
-            // Save file to imports directory
             var importsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "imports");
             Directory.CreateDirectory(importsDirectory);
 
@@ -66,7 +63,6 @@ public class EnrollmentsController : ControllerBase
                 await file.CopyToAsync(stream);
             }
 
-            // Create import job
             var importJob = new ImportJob
             {
                 CourseId = courseId,
@@ -77,7 +73,6 @@ public class EnrollmentsController : ControllerBase
 
             var createdJob = await _importJobRepository.CreateAsync(importJob);
 
-            // Publish message to queue
             await _publishEndpoint.Publish<ProcessEnrollmentCommand>(new
             {
                 JobId = createdJob.Id,
@@ -88,7 +83,6 @@ public class EnrollmentsController : ControllerBase
 
             _logger.LogInformation($"Import job {createdJob.Id} created and queued for course {courseId}");
 
-            // Get the job with course information for response
             var jobWithCourse = await _importJobRepository.GetByIdAsync(createdJob.Id);
             var jobDto = _mapper.Map<ImportJobDto>(jobWithCourse);
 

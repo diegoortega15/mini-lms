@@ -98,7 +98,7 @@ public class CoursesController : ControllerBase
             }
 
             _mapper.Map(updateCourseDto, existingCourse);
-            existingCourse.Id = id; // Ensure ID is preserved
+            existingCourse.Id = id;
 
             var updatedCourse = await _courseRepository.UpdateAsync(existingCourse);
             var courseDto = _mapper.Map<CourseDto>(updatedCourse);

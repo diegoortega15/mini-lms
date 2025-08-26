@@ -49,7 +49,6 @@ public class UserRepository : IUserRepository
         var existingUser = await GetByEmailAsync(email);
         if (existingUser != null)
         {
-            // Update name if different
             if (existingUser.Name != name)
             {
                 existingUser.Name = name;
@@ -58,7 +57,6 @@ public class UserRepository : IUserRepository
             return existingUser;
         }
 
-        // Create new user
         return await CreateAsync(new User { Email = email, Name = name });
     }
 }

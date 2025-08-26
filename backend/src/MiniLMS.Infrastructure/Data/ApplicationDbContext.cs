@@ -18,7 +18,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure Course
         modelBuilder.Entity<Course>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -27,7 +26,6 @@ public class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.Title);
         });
 
-        // Configure User
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -36,7 +34,6 @@ public class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.Email).IsUnique();
         });
 
-        // Configure Enrollment
         modelBuilder.Entity<Enrollment>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -53,7 +50,6 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // Configure ImportJob
         modelBuilder.Entity<ImportJob>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -68,7 +64,6 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // Seed data
         modelBuilder.Entity<Course>().HasData(
             new Course
             {

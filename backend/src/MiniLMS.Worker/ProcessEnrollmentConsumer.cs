@@ -33,7 +33,7 @@ public class ProcessEnrollmentConsumer : IConsumer<ProcessEnrollmentCommand>
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Failed to process enrollment job {message.JobId}: {ex.Message}");
-            throw; // Re-throw to trigger retry logic if configured
+            throw; 
         }
     }
 }
