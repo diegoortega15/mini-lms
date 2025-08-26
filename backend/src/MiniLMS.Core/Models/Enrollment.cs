@@ -7,7 +7,6 @@ public class Enrollment
     public int CourseId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Navigation properties
     public User User { get; set; } = null!;
     public Course Course { get; set; } = null!;
 }
