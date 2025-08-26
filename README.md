@@ -24,7 +24,7 @@ A simple course management system with batch upload via CSV.
 
 2. **Clone and run:**
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/diegoortega15/mini-lms.git
    cd project-folder
    docker-compose up --build
    ```
